@@ -1,0 +1,442 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Role Play</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            margin: 0;
+            padding: 5px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 95vw;
+            width: 95%;
+            min-height: 90vh;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .header-section {
+            flex-shrink: 0;
+        }
+        
+        .content-section {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .footer-section {
+            flex-shrink: 0;
+        }
+        
+        .logo {
+            margin-bottom: 10px;
+        }
+        
+        .wing {
+            color: #ff6b6b;
+            font-weight: 800;
+            font-size: 1.8em;
+            letter-spacing: 1px;
+            font-family: 'Nunito', sans-serif;
+        }
+        
+        .sky {
+            color: #4ecdc4;
+            font-weight: 800;
+            font-size: 1.8em;
+            letter-spacing: 1px;
+            font-family: 'Nunito', sans-serif;
+        }
+        
+        .class-title {
+            font-size: 1.1em;
+            color: #28a745;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 15px;
+            margin-top: 5px;
+            font-size: 2.2em;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .roleplay-display {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px 25px;
+            margin: 30px 0;
+            min-height: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-left: 5px solid #ff6b6b;
+            overflow-y: auto;
+        }
+        
+        .question-number {
+            font-size: 1.2em;
+            color: #ff6b6b;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: #fff2f2;
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 2px solid #ff6b6b;
+        }
+        
+        .question-text {
+            font-size: 1.4em;
+            color: #333;
+            line-height: 1.6;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 25px;
+            max-width: 100%;
+        }
+        
+        .answer-text {
+            font-size: 1.2em;
+            color: #555;
+            line-height: 1.7;
+            font-weight: 500;
+            text-align: left;
+            max-width: 100%;
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+            margin-top: 20px;
+        }
+        
+        .no-answer {
+            font-size: 1.1em;
+            color: #999;
+            font-style: italic;
+            text-align: center;
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .placeholder-text {
+            color: #999;
+            font-style: italic;
+            font-size: 1.5em;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .button {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 18px 40px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            min-width: 150px;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(0,0,0,0.3);
+        }
+        
+        .button:active {
+            transform: translateY(0);
+        }
+        
+        .answer-button {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            margin-top: 10px;
+        }
+        
+        .reset-button {
+            background: linear-gradient(45deg, #6c757d, #495057);
+        }
+        
+        .stats {
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .question-text {
+                font-size: 1.2em;
+                line-height: 1.5;
+            }
+            
+            .answer-text {
+                font-size: 1.1em;
+                line-height: 1.6;
+                padding: 15px;
+            }
+            
+            .button {
+                padding: 12px 25px;
+                font-size: 1.1em;
+                min-width: 120px;
+            }
+            
+            .button-container {
+                gap: 15px;
+            }
+            
+            .roleplay-display {
+                padding: 20px 15px;
+                min-height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-section">
+            <div class="logo">
+                <span class="wing">WING</span> <span class="sky">SKY</span>
+            </div>
+            <div class="class-title">Sophie's Class</div>
+            <h1>🎭 Role Play</h1>
+        </div>
+        
+        <div class="content-section">
+            <div class="roleplay-display" id="roleplayDisplay">
+                <div class="placeholder-text">Click "Next Question" to start practice!</div>
+            </div>
+        </div>
+        
+        <div class="footer-section">
+            <div class="button-container">
+                <button class="button" onclick="showNextQuestion()">❓ Next Question</button>
+                <button class="button answer-button" id="answerButton" onclick="showAnswer()" style="display: none;">💡 Answer</button>
+                <button class="button reset-button" onclick="resetRoleplay()">🔄 Start Over</button>
+            </div>
+            
+            <div class="stats" id="stats">
+                Total 14 questions • 0 completed
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const roleplays = [
+            {
+                number: "Q1",
+                question: "What would you do if a passenger were to be walking around the cabin when the seatbelt sign was on?",
+                answer: "I would make the passenger return to his or her seat explaining the in-flight safety policy. Then I would make sure his or her seatbelt was fastened properly for the passenger's safety."
+            },
+            {
+                number: "Q2",
+                question: "If a passenger smoked on the plane, how would you handle him?",
+                answer: "First, I would stop him or her from smoking in an assertive way and make sure that the cigarette was safely out. Then I would explain the dangers of in-flight smoking. Next, I would inform it to the rest of the team including the flight crew and keep monitoring him throughout the flight. Then I would provide the passenger with something sweet such as candies or chocolates for reducing the craving of smoking."
+            },
+            {
+                number: "Q3",
+                question: "If a passenger complained that it was really hot/cold in the cabin, what would you do?",
+                answer: "First, I would see if I could adjust the temperature in the cabin. If the other passengers do not share it, Hot: then I would bring some cold beverages for the passenger. Cold: then I would bring a blanket for the passenger."
+            },
+            {
+                number: "Q4",
+                question: "If a drunken passenger kept requiring more alcohol, what would you do?",
+                answer: "As cabin crew are in charge of safety and well-being of passengers during the flight, I would recommend him or her non-alcoholic beverages telling the passenger that it is easier to get drunk in the cabin than on the ground because of the high altitude. If the passenger insisted on being served an alcoholic drink, then I would reduce his consumption of alcohol by delaying delivery on purpose and by diluting the drink. Meanwhile I would inform other flight attendants about the passenger's drunken state."
+            },
+            {
+                number: "Q5",
+                question: "A passenger wants to have bibimbap, but you have run out. What would you say?",
+                answer: "In that situation, I would first apologize for not being able to provide the meal, then I would find out whether any of the other crew members or classes had that meal choice chosen by the passenger. If so, I would offer the passenger the meal of his or her choice. If it were not available, I would provide extra service to keep the passenger happy, and I would make sure that the passenger's preference was satisfied for the next in-flight meal service by taking an order from the passenger in advance."
+            },
+            {
+                number: "Q6",
+                question: "If an economy-passenger asked for the first-class meal, what would you do?",
+                answer: "I would say, \"Sorry, sir. The first class meal is prepared for the exact number of the first class passengers. The economy class meal is just as delicious as the first class meal.\""
+            },
+            {
+                number: "Q7",
+                question: "You spilled hot coffee/tomato juice on a passenger during sudden turbulence. What would you do?",
+                answer: "I would immediately apologize and wipe it off with a wet towel. If the passenger got burned, I would treat him or her by applying an ice bag or some ointment as trained. Furthermore, I would inform it to the rest of the team and keep monitoring his or her condition during the flight."
+            },
+            {
+                number: "Q8",
+                question: "If a passenger took a blanket, what would you do?",
+                answer: "I would say very politely, \"We need the blankets for the next passengers. I am sorry about that.\""
+            },
+            {
+                number: "Q9",
+                question: "What would you do if a passenger became upset?",
+                answer: "First of all, I would listen carefully and identify what made him or her upset. Then I would apologize and show genuine concern for the passenger's discomfort and inconvenience. After that, I would try my best to find a solution for the passenger as quickly as possible. Of course, I would try to make the passenger satisfied with my extraordinary service during the flight."
+            },
+            {
+                number: "Q10",
+                question: "If a passenger asked you on a date, what would you do?",
+                answer: "I would express my thanks to him for asking me to have a date. However, I would say that I cannot accept it because I have a boyfriend (or I am working now). Then I would serve him politely to give him a good impression of our company and to encourage him to fly with us again."
+            },
+            {
+                number: "Q11",
+                question: "How would you handle a situation if a passenger were to complain about a baby crying?",
+                answer: "I would first show genuine concern for the passenger's discomfort and inconvenience, and then I would ask the mother whether there was anything I would do to help settle the baby. If an alternative seat were available, I would move the passenger. If the baby continued crying, I would invite the mother to take her child to the galley, where she would have more space to treat her baby."
+            },
+            {
+                number: "Q12",
+                question: "If a child was running in the cabin, what would you do?",
+                answer: null
+            },
+            {
+                number: "Q13",
+                question: "What if a customer complains that the person sitting next to him or her smells bad?",
+                answer: null
+            },
+            {
+                number: "Q14",
+                question: "What would you do if I told you I thought your interview was terrible?",
+                answer: null
+            }
+        ];
+
+        let currentIndex = 0;
+        let answerShown = false;
+
+        // 클릭 소리 함수
+        function playClickSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(700, audioContext.currentTime);
+                oscillator.frequency.setValueAtTime(500, audioContext.currentTime + 0.1);
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.2);
+            } catch (error) {
+                // 소리 재생 실패시 무시
+            }
+        }
+
+        function showNextQuestion() {
+            playClickSound();
+            
+            if (currentIndex >= roleplays.length) {
+                alert("All questions completed! Please click 'Start Over' button.");
+                return;
+            }
+
+            const currentRoleplay = roleplays[currentIndex];
+            const roleplayDisplay = document.getElementById('roleplayDisplay');
+            const answerButton = document.getElementById('answerButton');
+            
+            roleplayDisplay.innerHTML = `
+                <div class="question-number">${currentRoleplay.number}</div>
+                <div class="question-text">${currentRoleplay.question}</div>
+            `;
+
+            // Answer 버튼 표시
+            if (currentRoleplay.answer) {
+                answerButton.style.display = 'inline-block';
+            } else {
+                // 답이 없는 질문의 경우
+                roleplayDisplay.innerHTML += `
+                    <div class="no-answer">This question is for practice. Think about your own answer!</div>
+                `;
+                answerButton.style.display = 'none';
+                currentIndex++;
+                updateStats();
+                return;
+            }
+
+            answerShown = false;
+        }
+
+        function showAnswer() {
+            if (answerShown) return;
+            
+            playClickSound();
+            
+            const currentRoleplay = roleplays[currentIndex];
+            const roleplayDisplay = document.getElementById('roleplayDisplay');
+            const answerButton = document.getElementById('answerButton');
+            
+            roleplayDisplay.innerHTML += `
+                <div class="answer-text">A: ${currentRoleplay.answer}</div>
+            `;
+
+            answerButton.style.display = 'none';
+            answerShown = true;
+            currentIndex++;
+            updateStats();
+        }
+
+        function resetRoleplay() {
+            playClickSound();
+            
+            currentIndex = 0;
+            answerShown = false;
+            const roleplayDisplay = document.getElementById('roleplayDisplay');
+            const answerButton = document.getElementById('answerButton');
+            
+            roleplayDisplay.innerHTML = '<div class="placeholder-text">Click "Next Question" to start practice!</div>';
+            answerButton.style.display = 'none';
+            updateStats();
+        }
+
+        function updateStats() {
+            const stats = document.getElementById('stats');
+            stats.textContent = `Total 14 questions • ${currentIndex} completed`;
+        }
+    </script>
+</body>
+</html>

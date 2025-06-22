@@ -156,7 +156,7 @@
         .button-container {
             display: flex;
             justify-content: center;
-            gap: 30px;
+            gap: 20px;
             margin: 20px 0;
             flex-wrap: wrap;
         }
@@ -166,14 +166,14 @@
             color: white;
             border: none;
             border-radius: 50px;
-            padding: 18px 40px;
-            font-size: 1.2em;
+            padding: 18px 35px;
+            font-size: 1.1em;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             margin: 5px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            min-width: 150px;
+            min-width: 140px;
         }
         
         .button:hover {
@@ -183,6 +183,22 @@
         
         .button:active {
             transform: translateY(0);
+        }
+        
+        .button:disabled {
+            background: linear-gradient(45deg, #ccc, #999);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .button:disabled:hover {
+            transform: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .previous-button {
+            background: linear-gradient(45deg, #6f42c1, #9c88ff);
         }
         
         .answer-button {
@@ -223,12 +239,12 @@
             
             .button {
                 padding: 12px 25px;
-                font-size: 1.1em;
-                min-width: 120px;
+                font-size: 1em;
+                min-width: 110px;
             }
             
             .button-container {
-                gap: 15px;
+                gap: 10px;
             }
             
             .roleplay-display {
@@ -256,6 +272,7 @@
         
         <div class="footer-section">
             <div class="button-container">
+                <button class="button previous-button" id="previousButton" onclick="showPreviousQuestion()" disabled>⬅️ Previous</button>
                 <button class="button" onclick="showNextQuestion()">❓ Next Question</button>
                 <button class="button answer-button" id="answerButton" onclick="showAnswer()" style="display: none;">💡 Answer</button>
                 <button class="button reset-button" onclick="resetRoleplay()">🔄 Start Over</button>
@@ -341,8 +358,8 @@
             }
         ];
 
-        let currentIndex = 0;
-        let answerShown = false;
+        let currentIndex = -1; // 시작 상태를 -1로 변경
+        let displayedQuestions = []; // 표시된 질문들을 추적
 
         // 클릭 소리 함수
         function playClickSound() {
@@ -367,43 +384,82 @@
             }
         }
 
+        function updateButtonStates() {
+            const previousButton = document.getElementById('previousButton');
+            
+            // Previous 버튼 상태 업데이트
+            if (currentIndex <= 0) {
+                previousButton.disabled = true;
+            } else {
+                previousButton.disabled = false;
+            }
+        }
+
         function showNextQuestion() {
             playClickSound();
             
-            if (currentIndex >= roleplays.length) {
+            if (currentIndex >= roleplays.length - 1) {
                 alert("All questions completed! Please click 'Start Over' button.");
                 return;
             }
 
+            currentIndex++;
+            displayQuestion();
+        }
+
+        function showPreviousQuestion() {
+            playClickSound();
+            
+            if (currentIndex <= 0) {
+                return;
+            }
+
+            currentIndex--;
+            displayQuestion();
+        }
+
+        function displayQuestion() {
             const currentRoleplay = roleplays[currentIndex];
             const roleplayDisplay = document.getElementById('roleplayDisplay');
             const answerButton = document.getElementById('answerButton');
             
+            // 기본 질문 표시
             roleplayDisplay.innerHTML = `
                 <div class="question-number">${currentRoleplay.number}</div>
                 <div class="question-text">${currentRoleplay.question}</div>
             `;
 
-            // Answer 버튼 표시
-            if (currentRoleplay.answer) {
-                answerButton.style.display = 'inline-block';
+            // 이미 표시된 질문인지 확인하고 답변도 함께 표시
+            if (displayedQuestions.includes(currentIndex)) {
+                if (currentRoleplay.answer) {
+                    roleplayDisplay.innerHTML += `
+                        <div class="answer-text">A: ${currentRoleplay.answer}</div>
+                    `;
+                    answerButton.style.display = 'none';
+                } else {
+                    roleplayDisplay.innerHTML += `
+                        <div class="no-answer">This question is for practice. Think about your own answer!</div>
+                    `;
+                    answerButton.style.display = 'none';
+                }
             } else {
-                // 답이 없는 질문의 경우
-                roleplayDisplay.innerHTML += `
-                    <div class="no-answer">This question is for practice. Think about your own answer!</div>
-                `;
-                answerButton.style.display = 'none';
-                currentIndex++;
-                updateStats();
-                return;
+                // 새로운 질문인 경우
+                if (currentRoleplay.answer) {
+                    answerButton.style.display = 'inline-block';
+                } else {
+                    roleplayDisplay.innerHTML += `
+                        <div class="no-answer">This question is for practice. Think about your own answer!</div>
+                    `;
+                    answerButton.style.display = 'none';
+                    displayedQuestions.push(currentIndex);
+                }
             }
 
-            answerShown = false;
+            updateButtonStates();
+            updateStats();
         }
 
         function showAnswer() {
-            if (answerShown) return;
-            
             playClickSound();
             
             const currentRoleplay = roleplays[currentIndex];
@@ -415,28 +471,38 @@
             `;
 
             answerButton.style.display = 'none';
-            answerShown = true;
-            currentIndex++;
+            
+            // 답변을 본 질문으로 추가
+            if (!displayedQuestions.includes(currentIndex)) {
+                displayedQuestions.push(currentIndex);
+            }
+            
             updateStats();
         }
 
         function resetRoleplay() {
             playClickSound();
             
-            currentIndex = 0;
-            answerShown = false;
+            currentIndex = -1;
+            displayedQuestions = [];
             const roleplayDisplay = document.getElementById('roleplayDisplay');
             const answerButton = document.getElementById('answerButton');
             
             roleplayDisplay.innerHTML = '<div class="placeholder-text">Click "Next Question" to start practice!</div>';
             answerButton.style.display = 'none';
+            
+            updateButtonStates();
             updateStats();
         }
 
         function updateStats() {
             const stats = document.getElementById('stats');
-            stats.textContent = `Total 14 questions • ${currentIndex} completed`;
+            const completedCount = displayedQuestions.length;
+            stats.textContent = `Total 14 questions • ${completedCount} completed`;
         }
+
+        // 초기 버튼 상태 설정
+        updateButtonStates();
     </script>
 </body>
 </html>
